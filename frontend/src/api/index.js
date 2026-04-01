@@ -1,1 +1,2 @@
-export const API_ENDPOINT = "https://restaurant-mgmt-bf6j.onrender.com";
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
