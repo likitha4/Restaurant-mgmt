@@ -54,7 +54,11 @@ const StarredRestaurants = () => {
 
   return (
     <div className='column'>
-      <h2>⭐ Starred Restaurants ⭐</h2>
+      <h2>
+    <span role="img" aria-label="star">⭐</span>
+    Starred Restaurants  
+      <span role="img" aria-label="star">⭐</span>
+      </h2>
       <ul>
         {starredRestaurants.map((restaurant) => (
           <li key={restaurant.id}>
