@@ -1,6 +1,6 @@
 import { API_ENDPOINT } from ".";
 
-const BASE_API_ROUTE = `${API_ENDPOINT}/restaurants/starred`;
+const BASE_API_ROUTE = `${API_ENDPOINT}/api/restaurants/starred`;
 
 export const getStarredRestaurants = async () => {
   const response = await fetch(`${BASE_API_ROUTE}`);
