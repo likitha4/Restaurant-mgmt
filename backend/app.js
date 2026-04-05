@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/restaurants/starred", starredRestaurantsRouter);
-app.use("/restaurants", restaurantsRouter);
+app.use("/api/restaurants/starred", starredRestaurantsRouter);
+app.use("/api/restaurants", restaurantsRouter);
 
 module.exports = app;
