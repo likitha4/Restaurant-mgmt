@@ -1,5 +1,4 @@
 const express = require("express");
-const { restart } = require("nodemon");
 const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 const ALL_RESTAURANTS = require("./restaurants").restaurants;
@@ -75,11 +74,12 @@ router.get("/:id", (req, res) => {
 router.post('/',(req, res)=>{
   const {id}=req.body;
   console.log(id, "id of adding to starred restaurants");
-   const fav=ALL_RESTAURANTS.find((restaurant)=>restaurant.restaurantId==id)
-   if(!fav)
+   const fav=ALL_RESTAURANTS.find((restaurant)=>restaurant.id==id)
+   if(!fav){
     res.sendStatus(404)
-
-  const newId=new uuidv4();
+    return;
+   }
+  const newId= uuidv4();
    const newStarredRestaurant={
     id:newId,
     restaurantId:fav.id,
@@ -89,7 +89,7 @@ router.post('/',(req, res)=>{
    res.status(200).send({
     id:newStarredRestaurant.id,
     comment:newStarredRestaurant.comment,
-    name:newStarredRestaurant.name
+    name:fav.name
    });
 })
 
@@ -114,9 +114,9 @@ res.sendStatus(200)
  * Feature 10: Updating your comment of a starred restaurant.
  */
 
-router.put('/',(req, res)=>{
+router.put('/:id',(req, res)=>{
   const {id}=req.params;
-  const {newcomment}=req.body;
+  const {newComment}=req.body;
   const restaurant=STARRED_RESTAURANTS.find((restaurant)=>restaurant.id==id)
   if(!restaurant)
   {
@@ -124,7 +124,7 @@ router.put('/',(req, res)=>{
     return;
   }
   
-restaurant.comment=newcomment;
+restaurant.comment=newComment;
 res.sendStatus(200)
 })
 
