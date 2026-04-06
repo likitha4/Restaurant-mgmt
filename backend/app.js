@@ -13,7 +13,7 @@ const starredRestaurantsRouter = require("./routes/starredRestaurants")
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({origin:"https://restaurant-mgmt-weld.vercel.app" }));
 
 app.use(logger("dev"));
 app.use(express.json());
