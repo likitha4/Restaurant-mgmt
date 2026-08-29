@@ -17,11 +17,10 @@ A full-stack restaurant discovery app with authenticated users,  favorites, revi
 - Frontend: React, Context API + reducer, CSS Grid/Flexbox.
 - Backend: Node.js, Express, Mongoose.
 - Auth: signed bearer token with PBKDF2 password hashing using Node crypto.
-- Database: MongoDB Atlas or a local MongoDB instance.
+- Database: Postgresql
 
 ## Local Setup
 
-Create `backend/.env`:
 
 
 
