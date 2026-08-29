@@ -1,13 +1,48 @@
-Restaurant Management System (RMS) is a full-stack web app where users can manage restaurants, star favorites, and leave comments. It uses React for the frontend, Context API for state management, and Node.js + Express for the backend API.
+# Restaurant Management System
 
-Features
+A full-stack restaurant discovery app with authenticated users, MongoDB-backed data, favorites, reviews and a responsive React dashboard.
 
-Manage Restaurants – Add, update, and delete restaurant entries.
+## Features
 
-Star & Unstar Restaurants – Mark favorite restaurants for easy access.
+- User registration, login and protected API routes.
+- MongoDB models for users, restaurants, favorites and reviews.
+- Restaurant CRUD with cuisine, neighborhood, price range, description and image metadata.
+- Favorite/unfavorite flow scoped to the signed-in user.
+- Visitor review feed with rating, visit type and comment history.
+- Dashboard metrics for restaurant count, favorites and top-rated restaurants.
+- Responsive React UI with search, cuisine filtering, review panel and mobile-friendly layouts.
 
- Comment on Starred Restaurants – Add and update comments on favorite places.
- 
- State Management – Uses React Context API & Reducer for global state handling.
- 
- Backend with Express.js – Handles API requests for restaurant management.
+## Tech Stack
+
+- Frontend: React, Context API + reducer, CSS Grid/Flexbox.
+- Backend: Node.js, Express, Mongoose.
+- Auth: signed bearer token with PBKDF2 password hashing using Node crypto.
+- Database: MongoDB Atlas or a local MongoDB instance.
+
+## Local Setup
+
+Create `backend/.env`:
+
+```bash
+MONGODB_URI=mongodb://127.0.0.1:27017/restaurant_mgmt
+JWT_SECRET=replace-with-a-long-random-secret
+FRONTEND_URL=http://localhost:3000
+```
+
+Install and run the backend:
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+Install and run the frontend:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+The frontend uses `http://localhost:8000` by default. To point it elsewhere, set `REACT_APP_API_URL`.
