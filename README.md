@@ -23,11 +23,7 @@ A full-stack restaurant discovery app with authenticated users, MongoDB-backed d
 
 Create `backend/.env`:
 
-```bash
-MONGODB_URI=mongodb://127.0.0.1:27017/restaurant_mgmt
-JWT_SECRET=replace-with-a-long-random-secret
-FRONTEND_URL=http://localhost:3000
-```
+
 
 Install and run the backend:
 
