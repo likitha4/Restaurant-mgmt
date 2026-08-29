@@ -1,6 +1,6 @@
 # Restaurant Management System
 
-A full-stack restaurant discovery app with authenticated users, MongoDB-backed data, favorites, reviews and a responsive React dashboard.
+A full-stack restaurant discovery app with authenticated users,  favorites, reviews and a responsive React dashboard.
 
 ## Features
 
