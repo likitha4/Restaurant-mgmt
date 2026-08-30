@@ -1,6 +1,6 @@
 # Restaurant Management System
 
-A full-stack restaurant discovery app with authenticated users, MongoDB-backed data, favorites, reviews and a responsive React dashboard.
+A full-stack restaurant discovery app with authenticated users,  favorites, reviews and a responsive React dashboard.
 
 ## Features
 
@@ -17,17 +17,12 @@ A full-stack restaurant discovery app with authenticated users, MongoDB-backed d
 - Frontend: React, Context API + reducer, CSS Grid/Flexbox.
 - Backend: Node.js, Express, Mongoose.
 - Auth: signed bearer token with PBKDF2 password hashing using Node crypto.
-- Database: MongoDB Atlas or a local MongoDB instance.
+- Database: Postgresql
 
 ## Local Setup
 
-Create `backend/.env`:
 
-```bash
-MONGODB_URI=mongodb://127.0.0.1:27017/restaurant_mgmt
-JWT_SECRET=replace-with-a-long-random-secret
-FRONTEND_URL=http://localhost:3000
-```
+
 
 Install and run the backend:
 
