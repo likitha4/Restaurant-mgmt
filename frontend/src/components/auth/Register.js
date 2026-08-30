@@ -12,8 +12,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors },
+    reset
   } = useForm();
   const [serverError, setServerError] = useState(null);
   const { authDispatch } = useContext(AuthContext);

@@ -36,17 +36,6 @@ align-items:flex-end;
 padding:60px;
 
 `;
-const Content= styled.div`
-flex:1;
-display:flex;
-align-items:center;
-justify-content: space-between;
-padding:60px 80px;
-`;
-
-const Marketing= styled.div`
-max-width:450px;
-`;
 
 const MarketingHeading= styled.h1`
 color: white;
