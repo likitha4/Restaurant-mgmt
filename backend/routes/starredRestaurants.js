@@ -1,7 +1,7 @@
 const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
-const ALL_RESTAURANTS = require("./restaurants").restaurants;
+const ALL_RESTAURANTS = [];
 
 /**
  * A list of starred restaurants.
