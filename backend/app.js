@@ -7,7 +7,7 @@ require("dotenv").config();
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const restaurantsRouter = require("./routes/restaurants");
-const reviewsRouter = require("./routes/reviews");
+// const reviewsRouter = require("./routes/reviews");
 const starredRestaurantsRouter = require("./routes/starredRestaurants");
 const pool= require("./db");
 
@@ -44,6 +44,6 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/restaurants/starred", starredRestaurantsRouter);
 app.use("/restaurants", restaurantsRouter);
-app.use("/reviews", reviewsRouter);
+// app.use("/reviews", reviewsRouter);
 
 module.exports = app;
