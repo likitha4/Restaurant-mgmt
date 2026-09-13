@@ -9,6 +9,7 @@ import RestaurantsContext from "../../provider/restaurants";
 import Restaurant from "./Restaurant";
 import { CardList} from "./RestaurantCardStyles";
 import AuthContext from "../../provider/auth";
+import { PageTitle } from "./RestaurantFormStyles";
 const Restaurants = () => {
   const {
     state: { restaurants },
@@ -74,7 +75,7 @@ const Restaurants = () => {
   return (
     <div className="column">
       <div id="restaurants">
-        <h2>Restaurants</h2>
+        <PageTitle>Restaurants</PageTitle>
         <CardList>
           {restaurants.map((restaurant) => (
             <div key={restaurant.id}>

@@ -8,6 +8,7 @@ import {
 import RestaurantsContext from "../../provider/restaurants";
 import AuthContext from "../../provider/auth";
 import { CardList } from "../restaurants/RestaurantCardStyles";
+import { PageTitle } from "../restaurants/RestaurantFormStyles";
 const StarredRestaurants = () => {
   const {
     state: { starredRestaurants },
@@ -62,15 +63,15 @@ const StarredRestaurants = () => {
 
   return (
     <div className="column">
-      <h2>
+      <PageTitle>
         <span role="img" aria-label="star">
           ⭐
         </span>
-        Starred Restaurants
+        Favorite Restaurants
         <span role="img" aria-label="star">
           ⭐
         </span>
-      </h2>
+      </PageTitle>
       <CardList>
         {starredRestaurants.map((restaurant) => (
           <div key={restaurant.restaurant_id}>

@@ -13,6 +13,12 @@ const Nav = styled.nav`
   padding: 16px 40px;
   background-color: ${(props) => props.theme.colors.secondary};
   border-bottom: 2px solid ${(props) => props.theme.colors.primary};
+  flex-wrap: wrap;
+  gap: 12px;
+
+  @media(max-width:600px){
+  padding: 12px 16px;
+  }
 `;
 const Logo = styled.h2`
   color: ${(props) => props.theme.colors.primary};
@@ -21,7 +27,14 @@ const Logo = styled.h2`
 
 const NavLinks = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 12px;
+  flex-wrap:nowrap;
+align-items:center;
+  @media (max-width:600px){
+  gap:8px;
+  flex-wrap:wrap
+  font-size:0.85rem;
+  }
   a {
     color: ${(props) => props.theme.colors.primary};
     text-decoration: none;
@@ -30,13 +43,17 @@ const NavLinks = styled.div`
 `;
 
 const NavButtonLink = styled(Link)`
-  padding: 0.5rem 1rem;
-  border: 2px solid ${(props) => props.theme.colors.primary};
+  padding: 0.4rem 0.9rem;
+  border: 1.5px solid ${(props) => props.theme.colors.primary};
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
   color: ${(props) => props.theme.colors.primary};
-  border-radius: 0.25rem;
+  border-radius: 0.4rem;
+  white-space:nowrap;
   &:hover {
     background-color: ${(props) => props.theme.colors.primary};
     color: white;
@@ -46,13 +63,19 @@ const LogoWrappper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  a{
-  text-decoration:none;
+  a {
+    text-decoration: none;
   }
 `;
 const LogoImg = styled.img`
   width: 52px;
   height: 52px;
+`;
+const LogoutButton= styled(StyledButton)`
+padding:0.4rem 0.9rem;
+font-size:0.85rem;
+min-height:auto;
+width:auto;
 `;
 
 const Navbar = () => {
@@ -67,16 +90,16 @@ const Navbar = () => {
 
   return (
     <Nav>
-        <LogoWrappper>
-          <LogoImg src="/favicon.jpeg" alt="Fork Find logo" />
-          <Link to="/"><Logo>ForkFind</Logo>
-          </Link>
-        </LogoWrappper>
-        <NavLinks>
-
+      <LogoWrappper>
+        <LogoImg src="/favicon.jpeg" alt="Fork Find logo" />
+        <Link to="/">
+          <Logo>ForkFind</Logo>
+        </Link>
+      </LogoWrappper>
+      <NavLinks>
         {authState.user ? (
           <>
-            <StyledButton onClick={handleLogout}>Logout</StyledButton>
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
             <NavButtonLink to="/restaurants/new">Add Restaurant</NavButtonLink>
             <NavButtonLink to="/favorites"> My Favorites</NavButtonLink>
           </>

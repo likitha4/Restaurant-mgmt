@@ -6,6 +6,9 @@ export const CardList = styled.div`
   gap: 1rem;
   max-width: 600px;
   margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
 `;
 
 export const Card = styled.div`
@@ -17,21 +20,39 @@ export const Card = styled.div`
     transform 0.15s ease,
     box-shadow 0.15s ease;
   border: 1px solid ${(props) => props.theme.colors.primary}22;
+  overfloe:hidden;
+  max-width:100%
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
   }
+    animation: fadeInUp 0.4s ease both;
+    animation-delay:calc(var(--i,0)*0.06s);
+    @keyframes fadeInUp{
+    from {
+    opacity: 0;
+    transform: translateY(16px);
+    }
+    to{
+    opacity:1;
+    transform: translateY(0);
+    }
+    }
 `;
 
 export const CardTitle = styled.h3`
   margin: 0 0 0.5rem 0;
   color: ${(props) => props.theme.colors.text};
+  overflow-wrap: break-word;
+  word-break: break-word;
 `;
 
 export const CardAddress = styled.p`
   margin: 0 0 0.5rem 0;
   font-size: 0.85rem;
   color: #666;
+  overflow-wrap: break-word;
+  word-break: break-word;
 `;
 
 export const CardDescription = styled.p`
@@ -39,6 +60,8 @@ export const CardDescription = styled.p`
   font-size: 0.9rem;
   font-style: italic;
   color: #444;
+  overflow-wrap: break-word;
+  word-break: break-word;
 `;
 
 export const EditFields = styled.div`
@@ -62,6 +85,10 @@ export const CardButton = styled.button`
   color: ${(props) => props.theme.colors.primary};
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+  &:active {
+    transform: scale(0.97);
+  }
   &:hover {
     background-color: ${(props) => props.theme.colors.primary};
     color: white;
