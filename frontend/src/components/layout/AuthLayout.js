@@ -33,7 +33,7 @@ background: linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35));
 inset:0;
 display:flex;
 align-items:flex-end;
-padding:60px;
+padding:0.85rem ;
 
 `;
 

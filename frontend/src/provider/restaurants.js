@@ -20,20 +20,18 @@ export const RestaurantsReducer = (state = RestaurantsInitialState, action) => {
       return {
         ...state,
         restaurants: state.restaurants.filter(
-          (restaurant) => restaurant.id !== action.payload
+          (restaurant) => restaurant.id !== action.payload,
         ),
       };
     }
     case "UPDATE_RESTAURANT_NAME": {
-      const nextRestaurantsState = [...state.restaurants];
-      const restaurantToUpdate = nextRestaurantsState.find(
-        (restaurant) => restaurant.id === action.payload.id
-      );
-
-      restaurantToUpdate.name = action.payload.newName;
       return {
         ...state,
-        restaurants: nextRestaurantsState,
+        restaurants: state.restaurants.map((restaurant) =>
+          restaurant.id === action.payload.id
+            ? { ...restaurant, ...action.payload }
+            : restaurant,
+        ),
       };
     }
     case "STAR_RESTAURANT": {
@@ -46,18 +44,16 @@ export const RestaurantsReducer = (state = RestaurantsInitialState, action) => {
       return {
         ...state,
         starredRestaurants: state.starredRestaurants.filter(
-          (restaurant) => restaurant.id !== action.payload
+          (restaurant) => restaurant.restaurant_id !== action.payload,
         ),
       };
     }
     case "UPDATE_STARRED_RESTAURANT_COMMENT": {
       const nextStarredRestaurantsState = [...state.starredRestaurants];
       const restaurantToUpdate = nextStarredRestaurantsState.find(
-        (restaurant) => restaurant.id === action.payload.id
+        (restaurant) => restaurant.restaurant_id === action.payload.restaurant_id,
       );
-
       restaurantToUpdate.comment = action.payload.newComment;
-
       return { ...state, starredRestaurants: nextStarredRestaurantsState };
     }
     default:

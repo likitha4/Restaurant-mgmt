@@ -28,10 +28,27 @@ const NavLinks = styled.div`
     font-weight: 600;
   }
 `;
+
+const NavButtonLink = styled(Link)`
+  padding: 0.5rem 1rem;
+  border: 2px solid ${(props) => props.theme.colors.primary};
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.colors.primary};
+  border-radius: 0.25rem;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.primary};
+    color: white;
+  }
+`;
 const LogoWrappper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  a{
+  text-decoration:none;
+  }
 `;
 const LogoImg = styled.img`
   width: 52px;
@@ -50,13 +67,19 @@ const Navbar = () => {
 
   return (
     <Nav>
-      <LogoWrappper>
-        <LogoImg src="/favicon.jpeg" alt="Fork Find logo"/>
-        <Logo>ForkFind</Logo>
-      </LogoWrappper>
-      <NavLinks>
+        <LogoWrappper>
+          <LogoImg src="/favicon.jpeg" alt="Fork Find logo" />
+          <Link to="/"><Logo>ForkFind</Logo>
+          </Link>
+        </LogoWrappper>
+        <NavLinks>
+
         {authState.user ? (
-          <StyledButton onClick={handleLogout}>Logout</StyledButton>
+          <>
+            <StyledButton onClick={handleLogout}>Logout</StyledButton>
+            <NavButtonLink to="/restaurants/new">Add Restaurant</NavButtonLink>
+            <NavButtonLink to="/favorites"> My Favorites</NavButtonLink>
+          </>
         ) : (
           <>
             <Link to="/login">Login</Link>

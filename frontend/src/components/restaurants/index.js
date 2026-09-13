@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext, useCallback } from "react";
 import {
-  addNewRestaurant,
   deleteRestaurant,
   getRestaurants,
   updateRestaurantName,
@@ -8,102 +7,90 @@ import {
 } from "../../api/restaurants";
 import RestaurantsContext from "../../provider/restaurants";
 import Restaurant from "./Restaurant";
-
+import { CardList} from "./RestaurantCardStyles";
+import AuthContext from "../../provider/auth";
 const Restaurants = () => {
   const {
     state: { restaurants },
     dispatch,
   } = useContext(RestaurantsContext);
-  const [newRestaurantName, setNewRestaurantName] = useState("");
+
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchData() {
       const restaurantsData = await getRestaurants();
-
       dispatch({ type: "LOADED_RESTAURANTS", payload: restaurantsData });
     }
     fetchData();
   }, [dispatch]);
 
-  const onAddNewRestaurant = async (e) => {
-    e.preventDefault();
+  
+  const onDeleteRestaurant = useCallback(
+    async (id) => {
+      const responseStatus = await deleteRestaurant(id, authState.token);
 
-    const newRestaurant = await addNewRestaurant(newRestaurantName);
-    setNewRestaurantName("");
-    dispatch({ type: "ADD_NEW_RESTAURANT", payload: newRestaurant });
-  };
+      if (responseStatus !== 200) {
+        alert("Deleting failed");
+        return;
+      }
+      dispatch({ type: "DELETE_RESTAURANT", payload: id });
+    },
+    [authState.token, dispatch],
+  );
 
-  const onDeleteRestaurant = async (id) => {
-    const responseStatus = await deleteRestaurant(id);
+  const onStarRestaurant = useCallback(
+    async (id) => {
+      const { data, status } = await starRestaurant(id, authState.token);
 
-    if (responseStatus !== 200) {
-      alert("Deleting failed");
-      return;
-    }
-    dispatch({ type: "DELETE_RESTAURANT", payload: id });
-  };
+      if (status !== 201) {
+        alert("Updating failed");
+        return;
+      }
 
-  const onStarRestaurant = async (id) => {
-    const { data, status } = await starRestaurant(id);
+      dispatch({ type: "STAR_RESTAURANT", payload: data });
+      alert("Starred the restaurant successfully.");
+    },
+    [authState.token, dispatch],
+  );
 
-    if (status !== 200) {
-      alert("Updating failed");
-      return;
-    }
+  const onUpdateRestaurant = useCallback(
+    async (id, data) => {
+      const responseStatus = await updateRestaurantName(
+        id,
+        data,
+        authState.token,
+      );
 
-    dispatch({ type: "STAR_RESTAURANT", payload: data });
-  };
-
-  const onUpdateRestaurant = async (id, newName) => {
-    const responseStatus = await updateRestaurantName(id, newName);
-
-    if (responseStatus !== 200) {
-      alert("Updating failed");
-      return;
-    }
-    dispatch({ type: "UPDATE_RESTAURANT_NAME", payload: { id, newName } });
-  };
+      if (responseStatus !== 200) {
+        alert("Updating failed");
+        return;
+      }
+      dispatch({ type: "UPDATE_RESTAURANT_NAME", payload: { id, ...data } });
+    },
+    [authState.token, dispatch],
+  );
 
   return (
-    <div className='column'>
-      <div id='restaurants'>
+    <div className="column">
+      <div id="restaurants">
         <h2>Restaurants</h2>
-        <ul>
+        <CardList>
           {restaurants.map((restaurant) => (
-            <li key={restaurant.id}>
+            <div key={restaurant.id}>
               <Restaurant
                 restaurant={restaurant}
-                onDeleteRestaurant={() => {
-                  onDeleteRestaurant(restaurant.id);
-                }}
-                onStarRestaurant={() => {
-                  onStarRestaurant(restaurant.id);
-                }}
-                onUpdateRestaurant={(newName) => {
-                  onUpdateRestaurant(restaurant.id, newName);
-                }}
+                isOwner={restaurant.created_by === authState.user?.id}
+                onDeleteRestaurant={onDeleteRestaurant}
+                onStarRestaurant={onStarRestaurant}
+                onUpdateRestaurant={onUpdateRestaurant}
               />
-            </li>
+            </div>
           ))}
-        </ul>
+        </CardList>
       </div>
 
-      <div id='add-new'>
-        <h3>Add a New Restaurant!</h3>
-        <form onSubmit={onAddNewRestaurant}>
-          <label htmlFor="name">Name: </label>
-          <input
-            type="text"
-            id="name"
-            value={newRestaurantName}
-            onChange={(e) => {
-              setNewRestaurantName(e.target.value);
-            }}
-          />
-
-          <button type="submit">Save</button>
-        </form>
-      </div>
+      
     </div>
   );
 };

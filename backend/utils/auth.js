@@ -87,7 +87,6 @@ const requireAuth = async (req, res, next) => {
   if (user.rows.length === 0) {
     return res.status(401).json({ message: "User no longer exists" });
   }
-
   req.user = user.rows[0];
   next();
 } catch(error){

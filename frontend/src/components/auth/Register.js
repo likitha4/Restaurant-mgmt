@@ -4,9 +4,8 @@ import { useContext } from "react";
 import AuthContext from "../../provider/auth";
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
-import { StyledButton, StyledError,StyledForm,StyledInput } from "./AuthStyles";
+import { StyledButton, StyledError,StyledForm,StyledInput, StyledLink } from "./AuthStyles";
 import { registerUser } from "../../api/auth";
-import { Link } from "react-router-dom";
 import AuthLayout from "../layout/AuthLayout";
 const Register = () => {
   const {
@@ -59,7 +58,7 @@ const Register = () => {
           {...register("password")}
         ></StyledInput>
         <StyledButton> Sign Up </StyledButton>
-        <p>Already have an account ? <Link to ="/login">Log in </Link></p>
+        <p>Already have an account ? <StyledLink to ="/login">Log in </StyledLink></p>
       </StyledForm>
       </AuthLayout>
   );

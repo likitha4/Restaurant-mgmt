@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import StarredRestaurant from "./StarredRestaurant";
 import {
   getStarredRestaurants,
@@ -6,74 +6,82 @@ import {
   updateComment,
 } from "../../api/starredRestaurants";
 import RestaurantsContext from "../../provider/restaurants";
-
+import AuthContext from "../../provider/auth";
+import { CardList } from "../restaurants/RestaurantCardStyles";
 const StarredRestaurants = () => {
   const {
     state: { starredRestaurants },
     dispatch,
   } = useContext(RestaurantsContext);
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchData() {
-      const restaurantsData = await getStarredRestaurants();
+      const restaurantsData = await getStarredRestaurants(authState.token);
       dispatch({
         type: "LOADED_STARRED_RESTAURANTS",
         payload: restaurantsData,
       });
     }
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, authState.token]);
 
-  const onUnstarRestaurant = async (id) => {
-    const responseStatus = await unstarRestaurant(id);
+  const onUnstarRestaurant = useCallback(
+    async (id) => {
+      const responseStatus = await unstarRestaurant(id, authState.token);
+      if (responseStatus !== 200) {
+        alert("Updating failed");
+        return;
+      }
+      dispatch({
+        type: "UNSTAR_RESTAURANT",
+        payload: id,
+      });
+    },
+    [authState.token, dispatch],
+  );
 
-    if (responseStatus !== 200) {
-      alert("Updating failed");
-      return;
-    }
-
-    dispatch({
-      type: "UNSTAR_RESTAURANT",
-      payload: id,
-    });
-  };
-
-  const onUpdateComment = async (id, newComment) => {
-    const responseStatus = await updateComment(id, newComment);
-
-    if (responseStatus !== 200) {
-      alert("Updating failed");
-      return;
-    }
-
-    dispatch({
-      type: "UPDATE_STARRED_RESTAURANT_COMMENT",
-      payload: { id, newComment },
-    });
-  };
+  const onUpdateComment = useCallback(
+    async (restaurant_id, newComment) => {
+      const responseStatus = await updateComment(
+        restaurant_id,
+        newComment,
+        authState.token,
+      );
+      if (responseStatus !== 200) {
+        alert("Updating failed");
+        return;
+      }
+      dispatch({
+        type: "UPDATE_STARRED_RESTAURANT_COMMENT",
+        payload: { restaurant_id, newComment },
+      });
+    },
+    [authState.token, dispatch],
+  );
 
   return (
-    <div className='column'>
+    <div className="column">
       <h2>
-    <span role="img" aria-label="star">⭐</span>
-    Starred Restaurants  
-      <span role="img" aria-label="star">⭐</span>
+        <span role="img" aria-label="star">
+          ⭐
+        </span>
+        Starred Restaurants
+        <span role="img" aria-label="star">
+          ⭐
+        </span>
       </h2>
-      <ul>
+      <CardList>
         {starredRestaurants.map((restaurant) => (
-          <li key={restaurant.id}>
+          <div key={restaurant.restaurant_id}>
             <StarredRestaurant
               restaurant={restaurant}
-              onUnstarRestaurant={() => {
-                onUnstarRestaurant(restaurant.id);
-              }}
-              onUpdateComment={(newComment) => {
-                onUpdateComment(restaurant.id, newComment);
-              }}
+              onUnstarRestaurant={onUnstarRestaurant}
+              onUpdateComment={onUpdateComment}
             />
-          </li>
+          </div>
         ))}
-      </ul>
+      </CardList>
     </div>
   );
 };

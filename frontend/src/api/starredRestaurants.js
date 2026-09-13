@@ -2,29 +2,42 @@ import { API_ENDPOINT } from ".";
 
 const BASE_API_ROUTE = `${API_ENDPOINT}/restaurants/starred`;
 
-export const getStarredRestaurants = async () => {
-  const response = await fetch(`${BASE_API_ROUTE}`);
-  const json = await response.json();
-
-  return json;
+export const getStarredRestaurants = async (token) => {
+  const response = await fetch(`${BASE_API_ROUTE}`,{
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  });
+  const result = await response.json();
+ console.log(result);
+  return result;
 };
 
-export const unstarRestaurant = async (id) => {
+export const unstarRestaurant = async (id,token) => {
   const response =  await fetch(`${BASE_API_ROUTE}/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
   });
 
   return response.status;
 };
 
-export const updateComment = async (id, newComment) => {
-  const response = await fetch(`${BASE_API_ROUTE}/${id}`, {
+export const updateComment = async (restaurant_id, newComment,token) => {
+  const response = await fetch(`${BASE_API_ROUTE}/${restaurant_id}`, {
     method: "PUT",
     body: JSON.stringify({
+
       newComment,
     }),
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+
     },
   });
 

@@ -37,7 +37,7 @@ ul{
 .restaurant-list{
   margin-bottom: 12px;
   text-align: center;
-  background-color: #FFF3AD;
+  /* background-color: #FFF3AD;÷ */
   padding: 12px;
   border-radius: 12px;
 }
@@ -50,7 +50,7 @@ ul{
 .starred-restaurant{
   text-align: center;
   color: white;
-  background-color: #553E4E;
+  /* background-color: #553E4E;÷ */
   padding: 12px;
   margin-bottom: 12px;
   border-radius: 12px;

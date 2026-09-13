@@ -1,106 +1,125 @@
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
+const pool = require("../db");
+const { requireAuth } = require("../utils/auth");
 
-/**
- * A list of all restaurants that exist.
- * In a "real" application, this data would be maintained in a database.
- */
-let ALL_RESTAURANTS = [
-  { id: "0b65fe74-03a9-4b37-ab09-1c8d23189273", name: "Taco Express" },
-  { id: "869c848c-7a58-4ed6-ab88-72ee2e8e677c", name: "Pho Vinason" },
-  { id: "213ca4a4-97ce-4783-917b-f94ef8315778", name: "Rondo Japanese" },
-  { id: "2334b925-802e-4161-b5dd-de53315c9325", name: "SpiceBox Indian Food" },
-  { id: "3e075c8e-7489-4fb6-b029-43a0a1b8936c", name: "Dick's Burgers" },
-  { id: "e8036613-4b72-46f6-ab5e-edd2fc7c4fe4", name: "Fremont Bowl Sushi" },
-  { id: "7f4a4fe2-58eb-4833-9e93-2dfdd1a1d91f", name: "Cafe Turko" },
-];
+router.get("/", async (req, res) => {
+  try {
+    const result = await pool.query(`
+    select r.id, r.name, r.address, r.description, r.created_by, coalesce(json_agg(c.name) filter (where c.name is not null),'[]') as cuisines
+    from restaurants r 
+    left join restaurant_cuisines rc on r.id=rc.restaurant_id
+    left join cuisines c on rc.cuisine_id= c.id
+    group by r.id
+    order by r.created_at desc`);
 
-/**
- * Feature 1: Getting a list of restaurants
- */
-router.get("/", (req, res) => {
-  res.json(ALL_RESTAURANTS);
-});
-
-/**
- * Feature 2: Getting a specific restaurant
- */
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-console.log(id);
-
-  // Find the restaurant with the matching id.
-  const restaurant = ALL_RESTAURANTS.find((restaurant) => restaurant.id === id);
-
-  // If the restaurant doesn't exist, let the client know.
-  if (!restaurant) {
-    res.sendStatus(404);
-    return;
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  res.json(restaurant);
 });
 
-/**
- * Feature 3: Adding a new restaurant
- */
-router.post("/", (req, res) => {
-  const { body } = req;
-  const { name } = body;
-
-  // Generate a unique ID for the new restaurant.
-  const newId = uuidv4();
-  const newRestaurant = {
-    id: newId,
-    name,
-  };
-
-  // Add the new restaurant to the list of restaurants.
-  ALL_RESTAURANTS.push(newRestaurant);
-
-  res.json(newRestaurant);
-});
-
-/**
- * Feature 4: Deleting a restaurant.
- */
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-
-  const newListOfRestaurants = ALL_RESTAURANTS.filter(
-    (restaurant) => restaurant.id !== id
-  );
-
-  // The user tried to delete a restaurant that doesn't exist.
-  if (ALL_RESTAURANTS.length === newListOfRestaurants.length) {
-    res.sendStatus(404);
-    return;
+router.get("/:id", async (req, res) => {
+  try {
+    const result = await pool.query("select * from restaurants  where id=$1", [
+      req.params.id,
+    ]);
+    if (result.rows.length == 0) return res.sendStatus(404);
+    res.json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  ALL_RESTAURANTS = newListOfRestaurants;
-
-  res.sendStatus(200);
 });
 
-/**
- * Feature 5: Updating the name of a restaurant.
- */
-router.put("/:id", (req, res) => {
-  const { id } = req.params;
-  const { newName } = req.body;
-
-  const restaurant = ALL_RESTAURANTS.find((restaurant) => restaurant.id === id);
-
-  if (!restaurant) {
-    res.sendStatus(404);
-    return;
+router.post("/", requireAuth, async (req, res) => {
+  try {
+    const { name, address, description, cuisineIds } = req.body;
+    const result = await pool.query(
+      `
+  insert into restaurants (name, address, description, created_by) values 
+  ($1, $2, $3, $4) returning *`,
+      [name, address, description, req.user.id],
+    );
+    const restaurant = result.rows[0];
+    if (Array.isArray(cuisineIds)) {
+      for (const cuisineId of cuisineIds) {
+        await pool.query(
+          "insert into restaurant_cuisines (restaurant_id, cuisine_id) values ($1,$2)",
+          [restaurant.id, cuisineId],
+        );
+      }
+    }
+    res.status(201).json(restaurant);
+  } catch (error) {
+    console.error(error);
+    if (error.code === "ENOTFOUND" || error.code === "ECONNREFUSED") {
+      return res
+        .status(503)
+        .json({
+          message: "Database connection issue. Please try again shortly.",
+        });
+    }
+    if (error.code === "23505") {
+      return res
+        .status(409)
+        .json({ message: " A restaurant with this address already exists." });
+    }
+    if (error.code === "42P01") {
+      return res.status(500).json({ message: "Server configuration error." });
+    }
+    res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again." });
   }
-
-  restaurant.name = newName;
-
-  res.sendStatus(200);
 });
 
+router.delete("/:id", requireAuth, async (req, res) => {
+  try {
+    const existing = await pool.query("select * from restaurants where id=$1", [
+      req.params.id,
+    ]);
+    if (existing.rows.length === 0) return res.sendStatus(404);
+    if (existing.rows[0].created_by !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Only the creator can delete this restaurant" });
+    }
+    await pool.query(
+      "delete from restaurant_cuisines where restaurant_id= $1",
+      [req.params.id],
+    );
+    await pool.query(
+      "delete from starred_restaurants where restaurant_id= $1",
+      [req.params.id],
+    );
+    await pool.query("delete from restaurants where id= $1", [req.params.id]);
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
-module.exports= router;
+router.put("/:id", requireAuth, async (req, res) => {
+  try {
+    const existing = await pool.query(
+      " select * from restaurants where id= $1",
+      [req.params.id],
+    );
+    if (existing.rows.length == 0) return res.sendStatus(404);
+    if (existing.rows[0].created_by !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Only the creator can edit this restaurant" });
+    }
+    const { name, address, description } = req.body;
+    const result = await pool.query(
+      "update restaurants set name=$1, address=$2, description=$3 where id=$4 returning *",
+      [name, address, description, req.params.id],
+    );
+    res.json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+module.exports = router;

@@ -7,52 +7,53 @@ export const getRestaurants = async () => {
   return restaurants;
 };
 
-export const addNewRestaurant = async (newName) => {
+export const addNewRestaurant = async (data, token) => {
   const response = await fetch(`${API_ENDPOINT}/restaurants`, {
     method: "POST",
-    body: JSON.stringify({
-      name: newName,
-    }),
+    body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
-
   const newRestaurant = await response.json();
-
   return newRestaurant;
 };
 
-export const deleteRestaurant = async (id) => {
+export const deleteRestaurant = async (id, token) => {
   const response = await fetch(`${API_ENDPOINT}/restaurants/${id}`, {
     method: "DELETE",
-  });
-
-  return response.status;
-};
-
-export const updateRestaurantName = async (id, newName) => {
-  const response = await fetch(`${API_ENDPOINT}/restaurants/${id}`, {
-    method: "PUT",
-    body: JSON.stringify({
-      newName,
-    }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
   return response.status;
 };
 
-export const starRestaurant = async (id) => {
+export const updateRestaurantName = async (id, data,token) => {
+  const response = await fetch(`${API_ENDPOINT}/restaurants/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.status;
+};
+
+export const starRestaurant = async (restaurantId, token) => {
   const response = await fetch(`${API_ENDPOINT}/restaurants/starred`, {
     method: "POST",
     body: JSON.stringify({
-      id,
+      restaurantId,
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 

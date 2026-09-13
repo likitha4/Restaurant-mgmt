@@ -1,47 +1,66 @@
 import React, { useState } from "react";
+import {
+  Card,
+  CardButton,
+  CardButtons,
+  CardDescription,
+  CardTitle,
+  EditFields,
+} from "../restaurants/RestaurantCardStyles";
+import { FieldGroup, FieldInput, FieldLabel } from "../restaurants/RestaurantFormStyles";
 
-const StarredRestaurant = ({ 
-  restaurant,
-  onUnstarRestaurant,
-  onUpdateComment
- }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [comment, setComment] = useState(restaurant.comment);
+const StarredRestaurant = React.memo(
+  ({ restaurant, onUnstarRestaurant, onUpdateComment }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [comment, setComment] = useState(restaurant.comment || "");
 
-  const onSaveComment = async () => {
-    onUpdateComment(comment);
-    setIsEditing(false);
-  };
+    const onCancelEdit = () => {
+      setComment(restaurant.comment || "");
+      setIsEditing(false);
+    };
 
-  return (
-    <div className='starred-restaurant' >
-      <h3>{restaurant.name}</h3>
-      {isEditing ? (
-          <input
-            type="text"
-            value={comment}
-            onChange={(e) => {
-              setComment(e.target.value);
-            }}
-          />
+    const onSaveComment = async () => {
+      await onUpdateComment(restaurant.restaurant_id, comment);
+      setIsEditing(false);
+    };
+
+    return (
+      <Card>
+        <CardTitle>{restaurant.name}</CardTitle>
+        {isEditing ? (
+          <EditFields>
+            <FieldGroup>
+              <FieldLabel htmlFor={`comment-${restaurant.restaurant_id}`}>
+                Comment
+              </FieldLabel>
+              <FieldInput
+                id={`comment-${restaurant.restaurant_id}`}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </FieldGroup>
+          </EditFields>
         ) : (
-          <p>{comment}</p>
+          <CardDescription>{comment}</CardDescription>
         )}
-      <button className='edit-btn'
-        onClick={() => {
-          setIsEditing((previousState) => !previousState)
-        }}
-      >
-        {isEditing ? "Cancel Edit" : "Edit Comment"}
-      </button>
-
-      {isEditing ? (
-        <button className='save-btn' onClick={onSaveComment}>Save Comment</button>
-      ) : (
-        <button className='unstar-btn' onClick={onUnstarRestaurant}>Unstar</button>
-      )}
-    </div>
-  );
-};
+        <CardButtons>
+          <CardButton
+            onClick={() =>
+              isEditing ? onCancelEdit() : setIsEditing(true)
+            }
+          >
+            {isEditing ? "Cancel" : "Edit Comment"}
+          </CardButton>
+          {isEditing && <CardButton onClick={onSaveComment}>Save</CardButton>}
+          <CardButton
+            onClick={() => onUnstarRestaurant(restaurant.restaurant_id)}
+          >
+            Unstar
+          </CardButton>
+        </CardButtons>
+      </Card>
+    );
+  },
+);
 
 export default StarredRestaurant;
