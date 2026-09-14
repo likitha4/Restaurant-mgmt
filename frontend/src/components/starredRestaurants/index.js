@@ -62,7 +62,7 @@ const StarredRestaurants = () => {
   );
 
   return (
-    <div className="column">
+    <>
       <PageTitle>
         <span role="img" aria-label="star">
           ⭐
@@ -73,17 +73,16 @@ const StarredRestaurants = () => {
         </span>
       </PageTitle>
       <CardList>
-        {starredRestaurants.map((restaurant) => (
-          <div key={restaurant.restaurant_id}>
-            <StarredRestaurant
+        {starredRestaurants.map((restaurant,index) => (
+            <StarredRestaurant key= {restaurant.restaurant_id} style={{"--i":index}}
               restaurant={restaurant}
               onUnstarRestaurant={onUnstarRestaurant}
               onUpdateComment={onUpdateComment}
             />
-          </div>
+          
         ))}
       </CardList>
-    </div>
+    </>
   );
 };
 

@@ -73,26 +73,22 @@ const Restaurants = () => {
   );
 
   return (
-    <div className="column">
+    
       <div id="restaurants">
         <PageTitle>Restaurants</PageTitle>
         <CardList>
-          {restaurants.map((restaurant) => (
-            <div key={restaurant.id}>
-              <Restaurant
+          {restaurants.map((restaurant,index) => (
+              <Restaurant key={restaurant.id}
+              style={{"--i":index}}
                 restaurant={restaurant}
                 isOwner={restaurant.created_by === authState.user?.id}
                 onDeleteRestaurant={onDeleteRestaurant}
                 onStarRestaurant={onStarRestaurant}
                 onUpdateRestaurant={onUpdateRestaurant}
               />
-            </div>
           ))}
         </CardList>
       </div>
-
-      
-    </div>
   );
 };
 

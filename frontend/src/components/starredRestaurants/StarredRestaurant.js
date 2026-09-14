@@ -10,7 +10,7 @@ import {
 import { FieldGroup, FieldInput, FieldLabel } from "../restaurants/RestaurantFormStyles";
 
 const StarredRestaurant = React.memo(
-  ({ restaurant, onUnstarRestaurant, onUpdateComment }) => {
+  ({ restaurant, onUnstarRestaurant, onUpdateComment,style }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [comment, setComment] = useState(restaurant.comment || "");
 
@@ -25,7 +25,7 @@ const StarredRestaurant = React.memo(
     };
 
     return (
-      <Card>
+      <Card style={style}>
         <CardTitle>{restaurant.name}</CardTitle>
         {isEditing ? (
           <EditFields>

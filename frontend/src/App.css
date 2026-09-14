@@ -1,57 +1,23 @@
-.App{
-  width: 70%;
-  margin: auto;
-  font-family: 'Montserrat', sans-serif;
+html,body{
+  overflow-x: hidden;
+  margin:0;
+  padding:0;
 }
 
-.column{
-  width: 50%;
-  float: left;
+
+.App{
+  width: 100%;
+  max-width: 1200px;
+  margin:0  auto;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+
 }
+
 
 h1, h2{
   text-align: center;
 }
 
-h3{
-  margin: 10px;
-}
 
-p{
-  margin: 10px 0px;
-}
 
-ul{
-  list-style: none;
-  padding: 0px;
-}
-
-#restaurants{
-  margin: 7%;
-}
-
-.restaurant-buttons{
-  margin-top: 5px;
-}
-
-.restaurant-list{
-  margin-bottom: 12px;
-  text-align: center;
-  /* background-color: #FFF3AD;÷ */
-  padding: 12px;
-  border-radius: 12px;
-}
-
-#add-new{
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-.starred-restaurant{
-  text-align: center;
-  color: white;
-  /* background-color: #553E4E;÷ */
-  padding: 12px;
-  margin-bottom: 12px;
-  border-radius: 12px;
-}

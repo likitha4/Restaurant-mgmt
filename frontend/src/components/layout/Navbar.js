@@ -42,23 +42,23 @@ align-items:center;
   }
 `;
 
-const NavButtonLink = styled(Link)`
-  padding: 0.4rem 0.9rem;
-  border: 1.5px solid ${(props) => props.theme.colors.primary};
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85rem;
-  min-height:40px;
-  display:inline-flex;
-  align-items:center;
-  color: ${(props) => props.theme.colors.primary};
-  border-radius: 0.4rem;
-  white-space:nowrap;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.primary};
-    color: white;
-  }
-`;
+// const NavButtonLink = styled(Link)`
+//   padding: 0.4rem 0.9rem;
+//   border: 1.5px solid ${(props) => props.theme.colors.primary};
+//   text-decoration: none;
+//   font-weight: 600;
+//   font-size: 0.85rem;
+//   min-height:40px;
+//   display:inline-flex;
+//   align-items:center;
+//   color: ${(props) => props.theme.colors.primary};
+//   border-radius: 0.4rem;
+//   white-space:nowrap;
+//   &:hover {
+//     background-color: ${(props) => props.theme.colors.primary};
+//     color: white;
+//   }
+// `;
 const LogoWrappper = styled.div`
   display: flex;
   align-items: center;
@@ -72,12 +72,36 @@ const LogoImg = styled.img`
   height: 52px;
 `;
 const LogoutButton= styled(StyledButton)`
-padding:0.4rem 0.9rem;
-font-size:0.85rem;
+padding:0.35rem 0.5rem;
+font-size:0.95rem;
 min-height:auto;
 width:auto;
+background:none;
+border-radius:0.35rem;
+border:none;
+color:${(props)=>props.theme.colors.primary};
+font-weight:600;
+cursor:pointer;
+font-family:inherit;
+transition:background-color 0.15s ease;
+&:hover{
+background-color:${(props)=>props.theme.colors.primary}15;
+}
 `;
 
+const NavLink= styled(Link)`
+color:${(props)=>props.theme.colors.primary};
+text-decoration:none;
+font-weight:600;
+font-size:0.95rem;
+padding:0.35rem 0.5rem;
+border-radius:0.35rem;
+transition: background-color 0.15s ease, color 0.15s ease;
+&:hover{
+background-color:${(props)=>props.theme.colors.primary}15;
+color:${(props)=>props.theme.colors.primary};
+}
+`;
 const Navbar = () => {
   const { authState, authDispatch } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -100,13 +124,13 @@ const Navbar = () => {
         {authState.user ? (
           <>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-            <NavButtonLink to="/restaurants/new">Add Restaurant</NavButtonLink>
-            <NavButtonLink to="/favorites"> My Favorites</NavButtonLink>
+            <NavLink to="/restaurants/new">Add Restaurant</NavLink>
+            <NavLink to="/favorites"> My Favorites</NavLink>
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Sign up</Link>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/register">Sign up</NavLink>
           </>
         )}
       </NavLinks>

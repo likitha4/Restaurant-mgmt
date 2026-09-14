@@ -16,6 +16,7 @@ const Restaurant = React.memo(
     onDeleteRestaurant,
     onStarRestaurant,
     onUpdateRestaurant,
+    style
   }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(restaurant.name);
@@ -36,7 +37,7 @@ const Restaurant = React.memo(
     };
 
     return (
-      <Card>
+      <Card style={style}>
         {isEditing ? (
           <EditFields>
             <FieldGroup>

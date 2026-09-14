@@ -1,43 +1,45 @@
 import styled from "styled-components";
 
 export const CardList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 600px;
+  display: grid;
+  grid-template-columns:1fr;
+  gap: 1.5rem;
+  max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 1rem 2rem;
   box-sizing: border-box;
+
+
+  @media (min-width:640px){
+  grid-template-columns: repeat(2,1fr);
+  }
+  @media (min-width:1024px){
+  grid-template-columns: repeat(3,1fr);
+  }
+  @media(max-width:480px){
+  padding: 0 0.75rem 1.5rem;
+  }
 `;
 
 export const Card = styled.div`
   background-color: white;
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   border: 1px solid ${(props) => props.theme.colors.primary}22;
-  overfloe:hidden;
-  max-width:100%
+  overflow:hidden;
+  
+  display:flex;
+  flex-direction:column;
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
   }
-    animation: fadeInUp 0.4s ease both;
-    animation-delay:calc(var(--i,0)*0.06s);
-    @keyframes fadeInUp{
-    from {
-    opacity: 0;
-    transform: translateY(16px);
-    }
-    to{
-    opacity:1;
-    transform: translateY(0);
-    }
-    }
+   
 `;
 
 export const CardTitle = styled.h3`
@@ -62,6 +64,7 @@ export const CardDescription = styled.p`
   color: #444;
   overflow-wrap: break-word;
   word-break: break-word;
+  flex:1;
 `;
 
 export const EditFields = styled.div`
