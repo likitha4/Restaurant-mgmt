@@ -14,11 +14,12 @@ import {
   CuisineGrid,
   FormTitle,
   CuisinePill,
+  FieldError,
 } from "./RestaurantFormStyles";
 
 function AddRestaurant() {
   const { authState } = useContext(AuthContext);
-  const { reset, handleSubmit, register } = useForm();
+  const { reset, handleSubmit, register, formState:{errors}} = useForm();
   const [cuisines, setCuisines] = useState([]);
   const navigate = useNavigate();
   const { dispatch } = useContext(RestaurantsContext);
@@ -43,15 +44,18 @@ function AddRestaurant() {
       <form onSubmit={handleSubmit(onAddNewRestaurant)}>
         <FieldGroup>
           <FieldLabel>Name</FieldLabel>
-          <FieldInput {...register("name")} />
+          <FieldInput {...register("name", {required: "Name is required"})} />
+          {errors.name &&<FieldError> {errors.name.message}</FieldError>}
         </FieldGroup>
         <FieldGroup>
           <FieldLabel>Address </FieldLabel>
-          <FieldInput {...register("address")} />
+          <FieldInput {...register("address",{required: "Address is required"})} />
+          {errors.address && <FieldError> {errors.address.message}</FieldError>}
         </FieldGroup>
         <FieldGroup>
           <FieldLabel>Description</FieldLabel>
-          <FieldInput {...register("description")} />
+          <FieldInput {...register("description",{required: "Description is required"})} />
+          {errors.description && <FieldError> {errors.description.message}</FieldError>}
         </FieldGroup>
         <FieldLabel>Cuisines</FieldLabel>
         <CuisineGrid>

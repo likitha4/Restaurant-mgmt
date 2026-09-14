@@ -38,6 +38,12 @@ export const FieldLabel = styled.label`
   color: ${(props) => props.theme.colors.text};
 `;
 
+export const FieldError= styled.p`
+color:${(props)=>props.theme.colors.primary};
+font-size:0.85rem;
+margin:0.25rem 0 0.5rem 0;
+`;
+
 export const FieldInput = styled.input`
   width: 100%;
   padding: 0.7rem 0.85rem;
