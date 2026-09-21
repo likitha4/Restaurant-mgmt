@@ -61,6 +61,25 @@ router.put("/:restaurantId", requireAuth, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.put("/:restaurantId/status", requireAuth, async (req, res) => {
+  try {
+    const {status}= req.body;
+   
+    const result = await pool.query(
+      "update starred_restaurants set status=$1 where restaurant_id=$2 and user_id= $3 returning *",
+      [status, req.params.restaurantId, req.user.id],
+    );
+
+    if(result.rows.length === 0){
+      return res.status(404).json({message:"Starred restaurant not found"});
+    }
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
 router.delete("/:restaurantId", requireAuth, async (req, res) => {
   try {
     await pool.query(

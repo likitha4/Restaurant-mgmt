@@ -10,6 +10,8 @@ import Restaurant from "./Restaurant";
 import { CardList} from "./RestaurantCardStyles";
 import AuthContext from "../../provider/auth";
 import { PageTitle } from "./RestaurantFormStyles";
+import useScrollAnimation from "../../hooks/useScrollAnimation";
+
 const Restaurants = () => {
   const {
     state: { restaurants },
@@ -17,6 +19,7 @@ const Restaurants = () => {
   } = useContext(RestaurantsContext);
 
   const { authState } = useContext(AuthContext);
+  useScrollAnimation(restaurants);
 
   useEffect(() => {
     async function fetchData() {
@@ -45,7 +48,7 @@ const Restaurants = () => {
       const { data, status } = await starRestaurant(id, authState.token);
 
       if (status !== 201) {
-        alert("Updating failed");
+        alert("Updating failed, the restaurant is already starred ");
         return;
       }
 
@@ -73,13 +76,13 @@ const Restaurants = () => {
   );
 
   return (
-    
       <div id="restaurants">
         <PageTitle>Restaurants</PageTitle>
         <CardList>
-          {restaurants.map((restaurant,index) => (
+          {Array.isArray(restaurants) && restaurants.map((restaurant,index) => (
               <Restaurant key={restaurant.id}
               style={{"--i":index}}
+              data-animate
                 restaurant={restaurant}
                 isOwner={restaurant.created_by === authState.user?.id}
                 onDeleteRestaurant={onDeleteRestaurant}

@@ -4,18 +4,20 @@ import {
   getStarredRestaurants,
   unstarRestaurant,
   updateComment,
+  updateStarredStatus,
 } from "../../api/starredRestaurants";
 import RestaurantsContext from "../../provider/restaurants";
 import AuthContext from "../../provider/auth";
 import { CardList } from "../restaurants/RestaurantCardStyles";
 import { PageTitle } from "../restaurants/RestaurantFormStyles";
+import useScrollAnimation from "../../hooks/useScrollAnimation";
 const StarredRestaurants = () => {
   const {
     state: { starredRestaurants },
     dispatch,
   } = useContext(RestaurantsContext);
   const { authState } = useContext(AuthContext);
-
+ useScrollAnimation(starredRestaurants);
   useEffect(() => {
     async function fetchData() {
       const restaurantsData = await getStarredRestaurants(authState.token);
@@ -61,6 +63,19 @@ const StarredRestaurants = () => {
     [authState.token, dispatch],
   );
 
+  const onUpdateStatus= useCallback(
+    async(restaurant_id, newStatus)=>{
+      try{
+        await updateStarredStatus(restaurant_id, newStatus,authState.token);
+        dispatch({type:"UPDATE_STARRED_RESTAURANT_STATUS", payload:{restaurant_id,newStatus},
+        });
+      }catch(error){
+        alert("Failed to update status");
+      }
+    
+    },[authState.token, dispatch],
+  );
+
   return (
     <>
       <PageTitle>
@@ -75,9 +90,11 @@ const StarredRestaurants = () => {
       <CardList>
         {starredRestaurants.map((restaurant,index) => (
             <StarredRestaurant key= {restaurant.restaurant_id} style={{"--i":index}}
+            data-animate
               restaurant={restaurant}
               onUnstarRestaurant={onUnstarRestaurant}
               onUpdateComment={onUpdateComment}
+              onUpdateStatus= {onUpdateStatus}
             />
           
         ))}

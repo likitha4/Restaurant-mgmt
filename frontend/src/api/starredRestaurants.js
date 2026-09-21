@@ -43,3 +43,20 @@ export const updateComment = async (restaurant_id, newComment,token) => {
 
   return response.status;
 };
+
+export const updateStarredStatus = async(restaurant_id, status,token)=>{
+  const result= await fetch(`${BASE_API_ROUTE}/${restaurant_id}/status`,{
+    method:"PUT",
+    headers:{
+      "Content-Type": "application/json",
+      "Authorization":`Bearer ${token}`,
+    },
+    body:JSON.stringify({status}),
+
+  })
+  if(!result.ok) {
+    const errorData= await result.json().catch(()=>({}));
+    throw new Error(errorData.message || "Failed to update Status");
+  }
+    return result.json();
+}

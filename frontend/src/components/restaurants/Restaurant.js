@@ -16,7 +16,7 @@ const Restaurant = React.memo(
     onDeleteRestaurant,
     onStarRestaurant,
     onUpdateRestaurant,
-    style
+    style,...rest
   }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(restaurant.name);
@@ -37,7 +37,7 @@ const Restaurant = React.memo(
     };
 
     return (
-      <Card style={style}>
+      <Card style={style} {...rest}>
         {isEditing ? (
           <EditFields>
             <FieldGroup>
@@ -72,8 +72,13 @@ const Restaurant = React.memo(
         ) : (
           <>
             <CardTitle>{name}</CardTitle>
-            <CardAddress>{address}</CardAddress>
+            <CardAddress >{address}</CardAddress>
             <CardDescription>{description}</CardDescription>
+            {restaurant.created_by_name &&(
+              <CardAddress style={{fontStyle:"italic" , color:"#888", marginTop:"0.25rem"}}>
+                Added by {restaurant.created_by_name}
+                </CardAddress>
+            )}
           </>
         )}
         <CardButtons>

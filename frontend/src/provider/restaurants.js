@@ -51,11 +51,22 @@ export const RestaurantsReducer = (state = RestaurantsInitialState, action) => {
     case "UPDATE_STARRED_RESTAURANT_COMMENT": {
       const nextStarredRestaurantsState = [...state.starredRestaurants];
       const restaurantToUpdate = nextStarredRestaurantsState.find(
-        (restaurant) => restaurant.restaurant_id === action.payload.restaurant_id,
+        (restaurant) =>
+          restaurant.restaurant_id === action.payload.restaurant_id,
       );
       restaurantToUpdate.comment = action.payload.newComment;
       return { ...state, starredRestaurants: nextStarredRestaurantsState };
     }
+
+    case "UPDATE_STARRED_RESTAURANT_STATUS":
+      return {
+        ...state,
+        starredRestaurants: state.starredRestaurants.map((item) =>
+          item.restaurant_id === action.payload.restaurant_id
+            ? { ...item, status: action.payload.newStatus }
+            : item,
+        ),
+      };
     default:
       return state;
   }

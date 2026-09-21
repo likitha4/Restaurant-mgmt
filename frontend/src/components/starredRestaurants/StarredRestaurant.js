@@ -8,12 +8,12 @@ import {
   EditFields,
 } from "../restaurants/RestaurantCardStyles";
 import { FieldGroup, FieldInput, FieldLabel } from "../restaurants/RestaurantFormStyles";
+import { StatusCard,StatusRow } from "../restaurants/RestaurantCardStyles";
 
 const StarredRestaurant = React.memo(
-  ({ restaurant, onUnstarRestaurant, onUpdateComment,style }) => {
+  ({ restaurant, onUnstarRestaurant, onUpdateComment,onUpdateStatus, style,...rest }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [comment, setComment] = useState(restaurant.comment || "");
-
     const onCancelEdit = () => {
       setComment(restaurant.comment || "");
       setIsEditing(false);
@@ -23,9 +23,14 @@ const StarredRestaurant = React.memo(
       await onUpdateComment(restaurant.restaurant_id, comment);
       setIsEditing(false);
     };
+    const handleStatusChange= async (newStatus)=>{
+      if(newStatus === restaurant.status) return;
+      onUpdateStatus(restaurant.restaurant_id,newStatus)
+    
+    }
 
     return (
-      <Card style={style}>
+      <Card style={style} {...rest}>
         <CardTitle>{restaurant.name}</CardTitle>
         {isEditing ? (
           <EditFields>
@@ -43,6 +48,16 @@ const StarredRestaurant = React.memo(
         ) : (
           <CardDescription>{comment}</CardDescription>
         )}
+      <StatusRow>
+        <StatusCard $active= {restaurant.status === "want_to_try"}
+        onClick={()=>handleStatusChange("want_to_try")}>
+          Want to Try
+        </StatusCard>
+        <StatusCard $active= {restaurant.status === "visited"}
+        onClick={()=>handleStatusChange("visited")}>
+          Visited
+        </StatusCard>
+      </StatusRow>
         <CardButtons>
           <CardButton
             onClick={() =>

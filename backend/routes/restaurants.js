@@ -6,16 +6,19 @@ const { requireAuth } = require("../utils/auth");
 router.get("/", async (req, res) => {
   try {
     const result = await pool.query(`
-    select r.id, r.name, r.address, r.description, r.created_by, coalesce(json_agg(c.name) filter (where c.name is not null),'[]') as cuisines
+    select r.id, r.name, r.address, r.description, r.created_by, 
+    u.name as created_by_name ,
+    coalesce(json_agg(c.name) filter (where c.name is not null),'[]') as cuisines
     from restaurants r 
     left join restaurant_cuisines rc on r.id=rc.restaurant_id
     left join cuisines c on rc.cuisine_id= c.id
-    group by r.id
+    left join users u on r.created_by=u.id
+    group by r.id,u.name 
     order by r.created_at desc`);
 
     res.json(result.rows);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Failed to fetch restaurants" });
   }
 });
 
