@@ -125,4 +125,12 @@ router.put("/:id", requireAuth, async (req, res) => {
   }
 });
 
+router.get("/cities", async(req,res)=>{
+  try{
+    const result= await pool.query("select distinct city from restaurants where city is not null");
+    res.json(result.rows);
+  }catch(error){
+    res.status(500).json({message:error.message});
+  }
+})
 module.exports = router;

@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -14,6 +14,7 @@ import GlobalStyle from "./GlobalStyle";
 import Register from "./components/auth/Register";
 import Navbar from "./components/layout/Navbar";
 import { Suspense } from "react";
+import { getCurrentUser } from "./api/auth";
 const Login = React.lazy(() => import("./components/auth/Login"));
 const Restaurants = React.lazy(() => import("./components/restaurants"));
 const StarredRestaurants = React.lazy(
@@ -29,7 +30,20 @@ function App() {
     RestaurantsInitialState,
   );
   const [authState, authDispatch] = useReducer(AuthReducer, AuthInitialState);
+useEffect(()=>{
+  const token= localStorage.getItem("token");
+  if(!token) return;
 
+  async function restoreSession(){
+    try{
+      const data= await getCurrentUser(token);
+      authDispatch({type:"AUTH_SUCCESS", payload: {user:data.user, token}})
+    }catch(error){
+      localStorage.removeItem("token")
+    }
+  }
+  restoreSession();
+},[authDispatch]);
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />

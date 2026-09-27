@@ -31,3 +31,16 @@ export const registerUser = async (name, email, password) => {
     }
     return loggedInUser;
   };
+
+  export const getCurrentUser= async(token)=>{
+    const response= await fetch(`${API_ENDPOINT}/auth/me`,{
+      headers:{
+        Authorization:`Bearer ${token}`,
+      },
+    });
+   const data= await response.json();
+   if(!response.ok){
+    throw new Error(data.message);
+   }
+  return data;
+  }
