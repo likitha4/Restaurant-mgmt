@@ -5,16 +5,21 @@ const { requireAuth } = require("../utils/auth");
 
 router.get("/", async (req, res) => {
   try {
+    const city = typeof req.query.city === "string"? req.query.city.trim():"";
+    const values = city? [city]:[];
+    const cityFilter = city? "where lower(trim(r.city))= lower(trim($1))":"";
+
     const result = await pool.query(`
-    select r.id, r.name, r.address, r.description, r.created_by, 
+    select r.id, r.name, r.address,r.city, r.description, r.created_by, 
     u.name as created_by_name ,
     coalesce(json_agg(c.name) filter (where c.name is not null),'[]') as cuisines
     from restaurants r 
     left join restaurant_cuisines rc on r.id=rc.restaurant_id
     left join cuisines c on rc.cuisine_id= c.id
     left join users u on r.created_by=u.id
+    ${cityFilter}
     group by r.id,u.name 
-    order by r.created_at desc`);
+    order by r.created_at desc`, values);
 
     res.json(result.rows);
   } catch (error) {
@@ -22,6 +27,14 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/cities", async(req,res)=>{
+  try{
+    const result= await pool.query("select distinct trim(city) as city from restaurants where city is not null and trim(city) <> '' order by city");
+    res.json(result.rows);
+  }catch(error){
+    res.status(500).json({message:"Failed to fetch cities"});
+  }
+})
 router.get("/:id", async (req, res) => {
   try {
     const result = await pool.query("select * from restaurants  where id=$1", [
@@ -36,12 +49,16 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", requireAuth, async (req, res) => {
   try {
-    const { name, address, description, cuisineIds } = req.body;
+    const { name, address, city, description, cuisineIds } = req.body;
+    const normalizedCity = typeof city ==="string" ? city.trim(): "";
+    if(!normalizedCity){
+      return res.status(400).json({message:"City is required",})
+    }
     const result = await pool.query(
       `
-  insert into restaurants (name, address, description, created_by) values 
-  ($1, $2, $3, $4) returning *`,
-      [name, address, description, req.user.id],
+  insert into restaurants (name, address, city, description, created_by) values 
+  ($1, $2, $3, $4, $5) returning *`,
+      [name, address, normalizedCity, description, req.user.id],
     );
     const restaurant = result.rows[0];
     if (Array.isArray(cuisineIds)) {
@@ -125,12 +142,5 @@ router.put("/:id", requireAuth, async (req, res) => {
   }
 });
 
-router.get("/cities", async(req,res)=>{
-  try{
-    const result= await pool.query("select distinct city from restaurants where city is not null");
-    res.json(result.rows);
-  }catch(error){
-    res.status(500).json({message:error.message});
-  }
-})
+
 module.exports = router;

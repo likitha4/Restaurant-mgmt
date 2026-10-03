@@ -53,6 +53,11 @@ function AddRestaurant() {
           {errors.address && <FieldError> {errors.address.message}</FieldError>}
         </FieldGroup>
         <FieldGroup>
+          <FieldLabel htmlFor="restaurant-city">City</FieldLabel>
+          <FieldInput id="restaurant-city" placeholder="For Example: Hyderabad"{...register("city",{ required:"City is required",})}/>
+          {errors.city && <FieldError>{errors.city.message}</FieldError>}
+        </FieldGroup>
+        <FieldGroup>
           <FieldLabel>Description</FieldLabel>
           <FieldInput {...register("description",{required: "Description is required"})} />
           {errors.description && <FieldError> {errors.description.message}</FieldError>}

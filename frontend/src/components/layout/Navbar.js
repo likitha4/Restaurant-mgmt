@@ -121,14 +121,15 @@ useEffect(()=>{
         <Link to="/">
           <Logo>ForkFind</Logo>
         </Link>
+        {authState.user && (
+            <LogoutButton   onClick={handleLogout}>Logout</LogoutButton>)}
       </LogoWrappper>
       <NavLinks>
         <Indicator style={{left:indicatorStyle.left, width:indicatorStyle.width}}/>
-        {authState.user ? (
-          <>
-            <LogoutButton ref={(el)=>(linksRef.current[0]=el)}  onClick={handleLogout}>Logout</LogoutButton>
-            <NavItem ref={(el)=>(linksRef.current[1]=el)} to="/restaurants/new" className={location.pathname==="/restaurants/new" ?"active":""}>Add Restaurant</NavItem>
-            <NavItem ref={(el)=>(linksRef.current[2]=el)} to="/favorites" className={location.pathname==="/favorites"?"active":""}> My Favorites</NavItem>
+       { authState.user ?(
+        <>
+            <NavItem ref={(el)=>(linksRef.current[0]=el)} to="/restaurants/new" className={location.pathname==="/restaurants/new" ?"active":""}>Add Restaurant</NavItem>
+            <NavItem ref={(el)=>(linksRef.current[1]=el)} to="/favorites" className={location.pathname==="/favorites"?"active":""}> My Favorites</NavItem>
           </>
         ) : (
           <>

@@ -18,6 +18,151 @@ html,body{
 h1, h2{
   text-align: center;
 }
+.restaurant-toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3rem;
+  margin-bottom: 1rem;
+  padding: 0 3.5rem;
+  box-sizing: border-box;
+}
+.restaurant-toolbar h2 {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+}
+
+.restaurant-toolbar .filter-button {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+}
+
+.restaurant-toolbar .filter-button:hover {
+  transform: translateY(calc(-50% - 1px));
+}
 
 
+.filter-button{
+  display: inline-flex;
+  align-items: center;
+  gap:0.55rem;
+  border: 1px solid rgba(193,68,14,0.55) ;
+  border-radius: 8px;
+  background: transparent;
+  color: #c1440e;
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
 
+}
+.filter-button:hover {
+  background: rgba(193, 68, 14, 0.08);
+  border-color: #c1440e;
+
+}
+
+.filter-button:focus-visible,
+.city-filter select:focus-visible {
+  outline: 3px solid rgba(80, 120, 255, 0.3);
+  outline-offset: 2px;
+}
+.restaurant-toolbar .filter-button:active {
+  transform: translateY(-50%);
+}
+
+.filter-lines {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 18px;
+}
+.filter-lines span {
+  display: block;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.filter-lines span:nth-child(1) {
+  width: 18px;
+}
+
+.filter-lines span:nth-child(2) {
+  width: 13px;
+}
+
+.filter-lines span:nth-child(3) {
+  width: 8px;
+}
+.city-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.city-filter label {
+  font-weight: 600;
+  color: #333333;
+}
+.city-filter select {
+  min-width: 180px;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #333333;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .restaurant-toolbar {
+    padding: 0 3.25rem;
+  }
+
+  .restaurant-toolbar h2 {
+    font-size: 1.4rem;
+  }
+
+  .restaurant-toolbar .filter-button {
+    right: 0.25rem;
+  }
+
+  .filter-button {
+    flex-shrink: 0;
+  }
+  .city-filter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .city-filter select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+.filter-button:active {
+  transform: translateY(1px);
+}
+.city-filter {
+  background: transparent;
+  border-color: rgba(193, 68, 14, 0.25);
+}
+
+.city-filter select {
+  background: rgba(255, 255, 255, 0.7);
+}

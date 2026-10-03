@@ -1,9 +1,10 @@
-import React, { useEffect, useContext, useCallback } from "react";
+import React, { useEffect, useContext, useCallback, useState } from "react";
 import {
   deleteRestaurant,
   getRestaurants,
   updateRestaurantName,
   starRestaurant,
+  getCities
 } from "../../api/restaurants";
 import RestaurantsContext from "../../provider/restaurants";
 import Restaurant from "./Restaurant";
@@ -19,16 +20,34 @@ const Restaurants = () => {
   } = useContext(RestaurantsContext);
 
   const { authState } = useContext(AuthContext);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [cities, setCities]= useState([])
+  const [isFilterOpen, setIsFilterOpen]= useState(false);
   useScrollAnimation(restaurants);
 
   useEffect(() => {
     async function fetchData() {
-      const restaurantsData = await getRestaurants();
+      try{
+      const restaurantsData = await getRestaurants(selectedCity);
       dispatch({ type: "LOADED_RESTAURANTS", payload: restaurantsData });
+    }catch(error){
+      console.error("Failed to fetch restaurants:", error);
     }
+  }
     fetchData();
-  }, [dispatch]);
+  }, [selectedCity, dispatch]);
 
+  useEffect(()=>{
+    async function fetchCities(){
+      try{
+        const citiesData = await getCities();
+        setCities(citiesData);
+      }catch(error){
+        console.error("Faile dto fetch cities", error);
+      }
+    }
+  fetchCities();
+  },[])
   
   const onDeleteRestaurant = useCallback(
     async (id) => {
@@ -77,7 +96,29 @@ const Restaurants = () => {
 
   return (
       <div id="restaurants">
+        <div className= "restaurant-toolbar">
         <PageTitle>Restaurants</PageTitle>
+        <button type="button" className="filter-button" onClick={()=>setIsFilterOpen((isOpen)=>!isOpen)} aria-expanded={isFilterOpen} aria-controls="city-filter">
+          <span className="filter-lines" aria-hidden="true">
+            <span/>
+            <span/>
+            <span/>
+          </span>
+          <span>Filter</span>
+        </button>
+        </div>
+
+        {isFilterOpen && (
+          <div id= "city-filter" className="city-filter">
+            <label htmlFor="city-select"> Choose a city</label>
+            <select id="city-select" value={selectedCity} onChange={(event)=>setSelectedCity(event.target.value)}>
+              <option value= "">All cities</option>
+              {cities.map((city)=>(
+                <option key= {city.city} value= {city.city}>{city.city}</option>
+              ))}
+            </select>
+            </div>
+        )}
         <CardList>
           {Array.isArray(restaurants) && restaurants.map((restaurant,index) => (
               <Restaurant key={restaurant.id}

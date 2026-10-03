@@ -30,78 +30,84 @@ function App() {
     RestaurantsInitialState,
   );
   const [authState, authDispatch] = useReducer(AuthReducer, AuthInitialState);
-useEffect(()=>{
-  const token= localStorage.getItem("token");
-  if(!token) return;
-
-  async function restoreSession(){
-    try{
-      const data= await getCurrentUser(token);
-      authDispatch({type:"AUTH_SUCCESS", payload: {user:data.user, token}})
-    }catch(error){
-      localStorage.removeItem("token")
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      authDispatch({type:"AUTH_CHECK_COMPLETE"});
+      return;
     }
-  }
-  restoreSession();
-},[authDispatch]);
+    async function restoreSession() {
+      try {
+        const data = await getCurrentUser(token);
+        authDispatch({
+          type: "AUTH_SUCCESS",
+          payload: { user: data.user, token }
+        });
+      } catch (error) {
+        localStorage.removeItem("token");
+      }finally{
+        authDispatch({type:"AUTH_CHECK_COMPLETE"});
+      }
+    }
+    restoreSession();
+  }, [authDispatch]);
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <BrowserRouter>
         <AuthContext.Provider value={{ authState, authDispatch }}>
-            <Routes>
-              <Route path="/login" element={
+          <Routes>
+            <Route
+              path="/login"
+              element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Login />
-                  </Suspense>
-              }/>
-              <Route path="/register" element={<Register />} />
+                </Suspense>
+              }
+            />
+            <Route path="/register" element={<Register />} />
 
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <RestaurantsContext.Provider value={{ state, dispatch }}>
-                      <Navbar />
-                      <Suspense fallback={<div>Loading... </div>}>
-
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <RestaurantsContext.Provider value={{ state, dispatch }}>
+                    <Navbar />
+                    <Suspense fallback={<div>Loading... </div>}>
                       <Restaurants />
-                      </Suspense>
-                    </RestaurantsContext.Provider>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/favorites"
-                element={
-                  <ProtectedRoute>
-                    <RestaurantsContext.Provider value={{ state, dispatch }}>
-                      <Navbar />
-                      <Suspense fallback={<div>Loading... </div>}>
-
+                    </Suspense>
+                  </RestaurantsContext.Provider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <ProtectedRoute>
+                  <RestaurantsContext.Provider value={{ state, dispatch }}>
+                    <Navbar />
+                    <Suspense fallback={<div>Loading... </div>}>
                       <StarredRestaurants />
-                      </Suspense>
-                    </RestaurantsContext.Provider>
-                  </ProtectedRoute>
-                }
-              />
+                    </Suspense>
+                  </RestaurantsContext.Provider>
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/restaurants/new"
-                element={
-                  <ProtectedRoute>
-                    <RestaurantsContext.Provider value={{ state, dispatch }}>
-                      <Navbar />
-                      <Suspense fallback={<div>Loading... </div>}>
-
+            <Route
+              path="/restaurants/new"
+              element={
+                <ProtectedRoute>
+                  <RestaurantsContext.Provider value={{ state, dispatch }}>
+                    <Navbar />
+                    <Suspense fallback={<div>Loading... </div>}>
                       <AddRestaurant />
-                      </Suspense>
-                    </RestaurantsContext.Provider>
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-        
+                    </Suspense>
+                  </RestaurantsContext.Provider>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
         </AuthContext.Provider>
       </BrowserRouter>
     </ThemeProvider>

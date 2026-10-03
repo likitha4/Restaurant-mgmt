@@ -65,6 +65,7 @@ router.post("/login", async (req, res) => {
     }
     res.json({ token: createToken(result), user: publicUser(result) });
   } catch (error) {
+    console.error("login error", error)
     res.status(500).json({ message: error.message });
   }
 });
