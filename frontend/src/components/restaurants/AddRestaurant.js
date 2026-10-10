@@ -15,12 +15,15 @@ import {
   FormTitle,
   CuisinePill,
   FieldError,
+  GenerateButton,
 } from "./RestaurantFormStyles";
+import { generateDescription } from "../../api/ai";
 
 function AddRestaurant() {
   const { authState } = useContext(AuthContext);
-  const { reset, handleSubmit, register, formState:{errors}} = useForm();
+  const { reset, handleSubmit, register, setValue, watch,  formState:{errors}} = useForm();
   const [cuisines, setCuisines] = useState([]);
+  const [isGenerating, setIsGenerating]= useState(false);
   const navigate = useNavigate();
   const { dispatch } = useContext(RestaurantsContext);
   useEffect(() => {
@@ -37,7 +40,27 @@ function AddRestaurant() {
     dispatch({ type: "ADD_NEW_RESTAURANT", payload: newRestaurant });
     navigate("/");
   };
-
+  const handleGenerateDescription = async()=>{
+    const name= watch("name");
+    const city = watch("city");
+    if(!name?.trim()){
+      alert("Please enter the restaurant name first");
+      return;
+    }
+    const payload = {name:name.trim()};
+    if(city?.trim()){
+      payload.city= city.trim();
+    }
+    try{
+      setIsGenerating(true);
+      const data= await generateDescription(payload, authState.token);
+ setValue("description", data.description, {shouldValidate:true});
+   }catch(err){
+      alert(err.message);
+    }finally{
+      setIsGenerating(false);
+    }
+  };
   return (
     <FormCard>
       <FormTitle>Add a New Restaurant!</FormTitle>
@@ -61,6 +84,9 @@ function AddRestaurant() {
           <FieldLabel>Description</FieldLabel>
           <FieldInput {...register("description",{required: "Description is required"})} />
           {errors.description && <FieldError> {errors.description.message}</FieldError>}
+        <GenerateButton type="button" onClick={handleGenerateDescription} disabled={isGenerating}>
+          {isGenerating?"Generating ...":"✨ Generate with AI"}
+        </GenerateButton>
         </FieldGroup>
         <FieldLabel>Cuisines</FieldLabel>
         <CuisineGrid>

@@ -4,13 +4,20 @@ import {
   getRestaurants,
   updateRestaurantName,
   starRestaurant,
-  getCities
+  getCities,
 } from "../../api/restaurants";
 import RestaurantsContext from "../../provider/restaurants";
 import Restaurant from "./Restaurant";
-import { CardList} from "./RestaurantCardStyles";
+import {
+  CardList,
+  CityFilter,
+  FilterButton,
+  FilterLines,
+  RestaurantToolbar,
+  ToolbarTitle,
+} from "./RestaurantCardStyles";
 import AuthContext from "../../provider/auth";
-import { PageTitle } from "./RestaurantFormStyles";
+// import { PageTitle } from "./RestaurantFormStyles";
 import useScrollAnimation from "../../hooks/useScrollAnimation";
 
 const Restaurants = () => {
@@ -21,34 +28,34 @@ const Restaurants = () => {
 
   const { authState } = useContext(AuthContext);
   const [selectedCity, setSelectedCity] = useState("");
-  const [cities, setCities]= useState([])
-  const [isFilterOpen, setIsFilterOpen]= useState(false);
+  const [cities, setCities] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   useScrollAnimation(restaurants);
 
   useEffect(() => {
     async function fetchData() {
-      try{
-      const restaurantsData = await getRestaurants(selectedCity);
-      dispatch({ type: "LOADED_RESTAURANTS", payload: restaurantsData });
-    }catch(error){
-      console.error("Failed to fetch restaurants:", error);
+      try {
+        const restaurantsData = await getRestaurants(selectedCity);
+        dispatch({ type: "LOADED_RESTAURANTS", payload: restaurantsData });
+      } catch (error) {
+        console.error("Failed to fetch restaurants:", error);
+      }
     }
-  }
     fetchData();
   }, [selectedCity, dispatch]);
 
-  useEffect(()=>{
-    async function fetchCities(){
-      try{
+  useEffect(() => {
+    async function fetchCities() {
+      try {
         const citiesData = await getCities();
         setCities(citiesData);
-      }catch(error){
+      } catch (error) {
         console.error("Faile dto fetch cities", error);
       }
     }
-  fetchCities();
-  },[])
-  
+    fetchCities();
+  }, []);
+
   const onDeleteRestaurant = useCallback(
     async (id) => {
       const responseStatus = await deleteRestaurant(id, authState.token);
@@ -95,44 +102,55 @@ const Restaurants = () => {
   );
 
   return (
-      <div id="restaurants">
-        <div className= "restaurant-toolbar">
-        <PageTitle>Restaurants</PageTitle>
-        <button type="button" className="filter-button" onClick={()=>setIsFilterOpen((isOpen)=>!isOpen)} aria-expanded={isFilterOpen} aria-controls="city-filter">
-          <span className="filter-lines" aria-hidden="true">
-            <span/>
-            <span/>
-            <span/>
-          </span>
-          <span>Filter</span>
-        </button>
-        </div>
+    <div id="restaurants">
+      <RestaurantToolbar>
+        <ToolbarTitle>Restaurants</ToolbarTitle>
+        <FilterButton
+          type="button"
+          onClick={() => setIsFilterOpen((isOpen) => !isOpen)}
+        >
+          <FilterLines>
+            <span />
+            <span />
+            <span />
+          </FilterLines>
+          Filter
+        </FilterButton>
+      </RestaurantToolbar>
 
-        {isFilterOpen && (
-          <div id= "city-filter" className="city-filter">
-            <label htmlFor="city-select"> Choose a city</label>
-            <select id="city-select" value={selectedCity} onChange={(event)=>setSelectedCity(event.target.value)}>
-              <option value= "">All cities</option>
-              {cities.map((city)=>(
-                <option key= {city.city} value= {city.city}>{city.city}</option>
-              ))}
-            </select>
-            </div>
-        )}
-        <CardList>
-          {Array.isArray(restaurants) && restaurants.map((restaurant,index) => (
-              <Restaurant key={restaurant.id}
-              style={{"--i":index}}
+      {isFilterOpen && (
+        <CityFilter>
+          <label htmlFor="city-select"> Choose a city</label>
+          <select
+            id="city-select"
+            value={selectedCity}
+            onChange={(event) => setSelectedCity(event.target.value)}
+          >
+            <option value="">All cities</option>
+            {cities.map((city) => (
+              <option key={city.city} value={city.city}>
+                {city.city}
+              </option>
+            ))}
+          </select>
+        </CityFilter>
+      )}
+      <CardList>
+        {Array.isArray(restaurants) &&
+          restaurants.map((restaurant, index) => (
+            <Restaurant
+              key={restaurant.id}
+              style={{ "--i": index }}
               data-animate
-                restaurant={restaurant}
-                isOwner={restaurant.created_by === authState.user?.id}
-                onDeleteRestaurant={onDeleteRestaurant}
-                onStarRestaurant={onStarRestaurant}
-                onUpdateRestaurant={onUpdateRestaurant}
-              />
+              restaurant={restaurant}
+              isOwner={restaurant.created_by === authState.user?.id}
+              onDeleteRestaurant={onDeleteRestaurant}
+              onStarRestaurant={onStarRestaurant}
+              onUpdateRestaurant={onUpdateRestaurant}
+            />
           ))}
-        </CardList>
-      </div>
+      </CardList>
+    </div>
   );
 };
 

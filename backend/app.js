@@ -10,6 +10,7 @@ const restaurantsRouter = require("./routes/restaurants");
 // const reviewsRouter = require("./routes/reviews");
 const starredRestaurantsRouter = require("./routes/starredRestaurants");
 const cuisinesRouter= require("./routes/cuisines");
+const aiRouter = require("./routes/ai");
 const pool= require("./db");
 
 const cors = require("cors");
@@ -46,5 +47,6 @@ app.use("/auth", authRouter);
 app.use("/restaurants/starred", starredRestaurantsRouter);
 app.use("/restaurants", restaurantsRouter);
 app.use("/cuisines",cuisinesRouter);
+app.use("/ai",aiRouter);
 
 module.exports = app;

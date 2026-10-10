@@ -131,3 +131,131 @@ export const StatusCard = styled.button`
     opacity: 0.9;
   }
 `;
+export const RestaurantToolbar = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3rem;
+  margin-bottom: 1rem;
+  padding: 0 3.5rem;
+  box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    padding: 0 3.25rem;
+  }
+`;
+
+export const ToolbarTitle = styled.h2`
+  width: 100%;
+  margin: 0;
+  text-align: center;
+
+  @media (max-width: 600px) {
+    font-size: 1.4rem;
+  }
+`;
+
+export const FilterButton = styled.button`
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid ${(props) => props.theme.colors.primary}8C;
+  border-radius: 8px;
+  background: transparent;
+  color: ${(props) => props.theme.colors.primary};
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease,
+    transform 0.18s ease;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.primary}14;
+    border-color: ${(props) => props.theme.colors.primary};
+    transform: translateY(calc(-50% - 1px));
+  }
+    &:active {
+    transform: translateY(-50%);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(80, 120, 255, 0.3);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 600px) {
+    right: 0.25rem;
+    flex-shrink: 0;
+  }
+`;
+export const FilterLines = styled.span`
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 18px;
+
+  span {
+    display: block;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  span:nth-child(1) {
+    width: 18px;
+  }
+  span:nth-child(2) {
+    width: 13px;
+  }
+  span:nth-child(3) {
+  width: 8px;
+  }
+`;
+
+export const CityFilter = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid ${(props) => props.theme.colors.primary}40;
+  border-radius: 8px;
+  background: transparent;
+
+  label {
+    font-weight: 600;
+    color: #333;
+    }
+
+  select {
+    min-width: 180px;
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #333;
+    padding: 0.55rem 0.7rem;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  select:focus-visible {
+    outline: 3px solid rgba(80, 120, 255, 0.3);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    select {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+`;
