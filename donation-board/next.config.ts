@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   experimental: {
     agentFeedback: true,
   },
+  basePath:"/donations",
+
   devIndicators:false,
   cacheComponents: true,
   partialPrefetching: true,
