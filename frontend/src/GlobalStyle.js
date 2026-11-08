@@ -10,8 +10,8 @@ const GlobalStyle = createGlobalStyle`
 body{
 background:linear-gradient(-45deg, #FDF6EC, #FFF0E0, #FDF6EC, #FFE8D6);
 margin:0;
-background-size: 400% 400%
-animation: gradientShift 15s ease infinte;
+background-size: 400% 400%;
+animation: gradientShift 15s ease infinite;
 font-family:'Montserrat', sans-serif;
 }`;
 export default GlobalStyle;

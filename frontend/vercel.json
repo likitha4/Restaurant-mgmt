@@ -1,0 +1,7 @@
+{
+    "rewrites": [
+      { "source": "/donations", "destination": "https://donation-board-blond.vercel.app/donations" },
+      { "source": "/donations/:path*", "destination": "https://donation-board-blond.vercel.app/donations/:path*" },
+      { "source": "/(.*)", "destination": "/index.html" }
+    ]
+  }

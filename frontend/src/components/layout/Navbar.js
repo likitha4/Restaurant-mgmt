@@ -130,6 +130,7 @@ useEffect(()=>{
         <>
             <NavItem ref={(el)=>(linksRef.current[0]=el)} to="/restaurants/new" className={location.pathname==="/restaurants/new" ?"active":""}>Add Restaurant</NavItem>
             <NavItem ref={(el)=>(linksRef.current[1]=el)} to="/favorites" className={location.pathname==="/favorites"?"active":""}> My Favorites</NavItem>
+            <NavItem as ="a" href={process.env.REACT_APP_DONATION_URL || "http://localhost:3001" } target="_blank" rel="noreferrer" ref={(el)=>(linksRef.current[2]=el)} >Donations</NavItem>
           </>
         ) : (
           <>
