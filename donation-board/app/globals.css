@@ -1,0 +1,49 @@
+:root { --primary: #D2691E; --text: #3B2A1E; --card: #fff5eb; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; color: var(--text);
+  background: linear-gradient(-45deg, #FDF6EC, #FFF0E0, #FDF6EC, #FFE8D6);
+}
+main { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+h1 { margin: 0 0 12px; }
+a { color: var(--primary); font-weight: 600; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.dn-links { display: flex; gap: 16px; margin-bottom: 20px; }
+
+.dn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.dn-card {
+  background: var(--card); border-radius: 1rem; padding: 1.25rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.dn-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12); }
+.dn-card h2 { margin: 8px 0 4px; font-size: 1.2rem; }
+.dn-kg { font-size: 1.6rem; font-weight: 700; margin: 0; color: var(--primary); }
+.dn-where { color: #666; margin: 8px 0 0; }
+.dn-until { color: #888; font-size: 0.85rem; margin: 4px 0 0; }
+.dn-badge, .dn-urgent { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.8rem; }
+.dn-badge { background: #e6f4ea; color: #1e6b34; }
+.dn-urgent { background: #fdecea; color: #b3261e; }
+.dn-empty { color: #888; }
+
+.dn-form { display: grid; gap: 14px; max-width: 380px; background: var(--card);
+  padding: 1.5rem; border-radius: 1rem; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
+.dn-form label { display: grid; gap: 4px; font-weight: 600; font-size: 0.9rem; }
+.dn-form input, .dn-form select {
+  padding: 10px; border: 1px solid rgba(210, 105, 30, 0.55); border-radius: 8px;
+  background: #fff; font: inherit; color: var(--text);
+}
+.dn-form button {
+  padding: 10px; border-radius: 0.5rem; border: 2px solid var(--primary);
+  background: var(--primary); color: #fff; font: inherit; font-weight: 600; cursor: pointer;
+}
+.dn-form button:hover { background: #fff; color: var(--primary); }
+
+.dn-actions { display: flex; gap: 8px; margin-top: 12px; }
+.dn-btn { padding: 6px 14px; border-radius: 0.5rem; border: 2px solid var(--primary);
+  background: #fff; color: var(--primary); font: inherit; font-weight: 600; cursor: pointer; }
+.dn-btn:hover { background: var(--primary); color: #fff; }
+.dn-danger { border-color: #b3261e; color: #b3261e; }
+.dn-danger:hover { background: #b3261e; color: #fff; }
+.dn-edit { display: grid; gap: 8px; }
+.dn-edit input { padding: 8px; border: 1px solid rgba(210, 105, 30, 0.55); border-radius: 8px; font: inherit; }
