@@ -5,7 +5,6 @@ A full-stack restaurant discovery app with authenticated users,  favorites, revi
 ## Features
 
 - User registration, login and protected API routes.
-- MongoDB models for users, restaurants, favorites and reviews.
 - Restaurant CRUD with cuisine, neighborhood, price range, description and image metadata.
 - Favorite/unfavorite flow scoped to the signed-in user.
 - Visitor review feed with rating, visit type and comment history.
@@ -15,7 +14,7 @@ A full-stack restaurant discovery app with authenticated users,  favorites, revi
 ## Tech Stack
 
 - Frontend: React, Context API + reducer, CSS Grid/Flexbox.
-- Backend: Node.js, Express, Mongoose.
+- Backend: Node.js, Express,
 - Auth: signed bearer token with PBKDF2 password hashing using Node crypto.
 - Database: Postgresql
 
