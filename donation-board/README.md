@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Donation Board
 
-## Getting Started
+Next.js pages for the donations feature: browse available donations (`/`) and post a donation (`/new`). Owners see Edit and Delete on their own cards.
 
-First, run the development server:
+## Environment variables
+
+| Name | Purpose |
+|---|---|
+| `DONATION_API_URL` | donation service `/graphql` URL, used by server components |
+| `NEXT_PUBLIC_DONATION_API_URL` | the same URL, used by browser code |
+
+`NEXT_PUBLIC_` values are baked in at build time, so redeploy after changing them.
+
+## How login works
+
+The board reads the login token that Fork Find stores in `localStorage` and sends it to the donation service as `Authorization: Bearer <token>`. In production the board is served under Fork Find's own domain at `/donations` (a rewrite in `frontend/vercel.json`), so both share one origin and one login.
+
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev -- -p 3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3001/donations (the base path is `/donations`). Locally, set a token first in the browser console: `localStorage.setItem("token", "<token from a Fork Find login>")`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Its own Vercel project with root directory `donation-board`.
