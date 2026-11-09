@@ -1,0 +1,13 @@
+name: keep-neon-awake
+on:
+  schedule:
+    - cron: "0*/12 * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Neon
+        run: psql "$DATABASE_URL" -c "select 1"
+        env:
+          DATABASE_URL: ${{secrets.NEON_DATABASE_URL}}
