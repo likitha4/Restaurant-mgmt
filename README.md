@@ -41,3 +41,23 @@ npm start
 ```
 
 The frontend uses `http://localhost:8000` by default. To point it elsewhere, set `REACT_APP_API_URL`.
+
+## Donations (surplus food sharing)
+
+Restaurant owners can post surplus food (type, quantity in kg, hours until it spoils). Anyone can browse the available donations. Only a restaurant's owner can post for it, and only the owner of a donation can edit or delete it. The feature lives at `/donations` on the Fork Find site.
+
+```
+Browser -> Fork Find (React) -> /donations (Vercel rewrite)
+        -> donation-board (Next.js) -> donation-service (FastAPI + GraphQL) -> PostgreSQL (Neon)
+```
+
+Login stays with the Node backend. The Python service verifies the same signed token, using the same `JWT_SECRET`, so users don't log in twice.
+
+**Tech:** Python, FastAPI, Strawberry GraphQL, SQLAlchemy, Next.js, TypeScript, Render, Vercel, Neon.
+
+| Folder | What it is |
+|---|---|
+| `backend/` | Node/Express API: users, restaurants, login |
+| `frontend/` | React app (Fork Find) |
+| `donation-service/` | Python GraphQL service for donations |
+| `donation-board/` | Next.js pages for browsing and posting donations |
